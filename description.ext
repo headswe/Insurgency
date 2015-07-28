@@ -1,0 +1,122 @@
+onLoadName = "Head's Insurgency";
+author="Head";
+OnLoadMission = "";
+respawn = 3; // base
+respawnDelay = 10;
+disabledAI = 1;
+enableDebugConsole = 1;
+taskManagement_markers2D = 1;
+taskManagement_propagate = 1;
+class Header
+{
+	gameType = Coop; // Game type, see 'class' columns in the table below
+	minPlayers = 1; //min # of players the mission supports
+	maxPlayers = 10; //max # of players the mission supports
+};
+class CfgFunctions
+{
+	#include "ws_fnc\config.hpp"
+	class F // Defines the "owner"
+	{
+		class groupMarkers {
+			file = "groupMarkers";
+			class addGroupMarker{};
+			class drawGroupMarkers{};
+			class getGroupMarkerStyle{};
+			class findGroupMarkerID{};
+			class setupGroupMarkers{};
+		};
+	}
+	class he
+	{
+		class ins
+		{
+			file = "ins";
+			class generateRoadblock{};
+			class getAreaName{};
+			class getUnitsFromFaction{};
+			class objectiveClear{};
+			class objectiveFound{};
+			class spawnDefenders{};
+			class saveLoadout{};
+			class loadLoadout{};
+			class onRespawn{};
+			class oneastspawn{};
+			class spawnGroup{}; // TODO : rename this
+			class start;
+		}
+	}
+};
+
+class CfgNotifications
+{
+	class Default
+	{
+		title = ""; // Tile displayed as text on black background. Filled by arguments.
+		iconPicture = ""; // Small icon displayed in left part. Colored by "color", filled by arguments.
+		iconText = ""; // Short text displayed over the icon. Colored by "color", filled by arguments.
+		description = ""; // Brief description displayed as structured text. Colored by "color", filled by arguments.
+		color[] = {1,1,1,1}; // Icon and text color
+		duration = 5; // How many seconds will the notification be displayed
+		priority = 0; // Priority; higher number = more important; tasks in queue are selected by priority
+		difficulty[] = {}; // Required difficulty settings. All listed difficulties has to be enabled
+	};
+
+	// Examples
+	class ObjectiveFound
+	{
+		title = "Enemy strongpoint located";
+		iconPicture = "\A3\ui_f\data\map\mapcontrol\taskIcon_ca.paa";
+		description = "%1";
+		priority = 7;
+	};
+	class ObjectiveDestroyed
+	{
+		title = "Enemy strongpoint destroyed";
+		iconPicture = "\A3\ui_f\data\map\mapcontrol\taskIcon_ca.paa";
+		description = "%1";
+		priority = 7;
+	};
+	class ObjectiveRecaptured
+	{
+		title = "Enemy strongpoint recaptured";
+		iconPicture = "\A3\ui_f\data\map\mapcontrol\taskIcon_ca.paa";
+		description = "%1";
+		priority = 7;
+	};
+	class LoadoutSaved
+	{
+		title = "Loadout Saved";
+		iconPicture = "\A3\Ui_f\data\IGUI\Cfg\Actions\reammo_ca.paa";
+		description = "Loadout has been saved";
+		priority = 7;
+	};
+};
+class Extended_InitPost_EventHandlers {
+  class CAManBase {
+    class NoUnconsciousOnEast {
+      init = "[_this select 0] call he_fnc_onEastSpawn";
+    };
+  };
+};
+
+
+
+class Extended_Init_EventHandlers
+{
+    class AllVehicles
+    {
+	//	head_cache = "_this spawn UCD_fnc_cacheObject";
+    };
+};
+class CfgRespawnTemplates
+{
+	// Class used in respawnTemplates entry
+	class ins_respawn
+	{
+		// Function or script executed upon respawn. Parameters passed into it are the same as are passed into onPlayerRespawn.sqf file
+		onPlayerRespawn = "he_fnc_onRespawn";
+	};
+};
+respawnTemplates[] = {"MenuPosition","ins_respawn"};
+respawnOnStart = 0;
